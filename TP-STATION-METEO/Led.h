@@ -1,4 +1,6 @@
+#pragma once;
 #include <iostream>
+
 class Led {
   private:
    bool allumee;
@@ -9,7 +11,7 @@ class Led {
 
     ~Led() {
       eteindre();
-      std::cout << "[LED PIN " << pin << "] LIBERE" << std::endl
+      std::cout << "[LED PIN " << pin << "] LIBERE" << std::endl;
     }
   
     void allumer() {

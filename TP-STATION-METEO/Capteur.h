@@ -1,3 +1,4 @@
+#pragma once;
 #include <iostream>
 #include <string>
 
@@ -8,7 +9,7 @@ class Capteur {
     string nom;
     string unite;
     double derniereValeur;
-    static int nbCapteurs;
+    inline static int nbCapteurs = 0;
 
   public:
     virtual double lire() = 0;

@@ -1,9 +1,10 @@
+#pragma once;
 #include <iostream>
 #include <string>
 #include <vector>
-#include <Capteur.h>
-#include <AfficheurConsole.h>
-#include <Alarme.h>
+#include "Capteur.h"
+#include "AfficheurConsole.h"
+#include "Alarme.h"
 #include <memory>
 
 using namespace std;

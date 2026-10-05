@@ -1,6 +1,7 @@
+#pragma once;
 #include <iostream>
 #include <string>
-#include <Afficheur.h>
+#include "Afficheur.h"
 
 using namespace std;
 

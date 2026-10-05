@@ -1,6 +1,7 @@
+#pragma once;
 #include <iostream>
 #include <string>
-#include <Capteur.h>
+#include "Capteur.h"
 #include <random>
 
 using namespace std;
