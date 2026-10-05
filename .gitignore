@@ -2,3 +2,4 @@ build/
 target/
 main.exe
 main.obj
+noeud/build/
