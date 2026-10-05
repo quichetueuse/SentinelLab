@@ -35,7 +35,7 @@ class StationMeteo {
       }
     }
 
-    vector<unique_ptr<Capteur>> getListeCapteurs() {
+    const vector<unique_ptr<Capteur>>& getListeCapteurs() const {
       return listeCapteurs;
     }
     Afficheur* getAfficheur() {
