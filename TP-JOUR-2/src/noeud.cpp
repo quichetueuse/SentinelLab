@@ -96,6 +96,7 @@ static void chienDeGarde(std::stop_token st) {
       if (ecoule > 3000) {
         const char msg[] = "Chien de garde ERREUR - blocage de la boucle detecte, arret d urgence ";
         ::write(STDERR_FILENO, msg, sizeof(msg) - 1);
+        std::abort();
       }
     }
   }
