@@ -92,10 +92,10 @@ static void chienDeGarde(std::stop_token st) {
       dernier = actuel;
       derniereVue = steady_clock::now();
     } else {
-      const auto ecoule = duration_cast<milliseconds>(steady_clock::now() = derniereVue).count();
+        const auto ecoule = duration_cast<milliseconds>(steady_clock::now() - derniereVue).count();
       if (ecoule > 3000) {
         const char msg[] = "Chien de garde ERREUR - blocage de la boucle detecte, arret d urgence ";
-        ::write(STDERR_FILEEND, msg, sizeof(msg) - 1);
+        ::write(STDERR_FILENO, msg, sizeof(msg) - 1);
       }
     }
   }

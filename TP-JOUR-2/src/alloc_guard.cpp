@@ -22,7 +22,7 @@ void* operator new(std::size_t n) {
     ++g_init;
   } else {
     ++g_regime;
-    std::printf(stderr, "Le programme est initialise, impossible d allouer plus de memoire.");
+    std::fprintf(stderr, "Le programme est initialise, impossible d allouer plus de memoire.\n");
     std::abort();
   }
 

@@ -14,22 +14,27 @@ class RingBuffer {
 public:
   // Ajoute v. Renvoie false si la file est pleine (aucun écrasement silencieux).
   bool push(const T& v) {
-    // TODO A1 : refuser si plein, sinon écrire à l'indice head_ modulo N puis avancer head_
-    return false;
+    if (full()) return false;
+    buf_[head_ & (N - 1)] = v;
+    ++head_;
+    return true;
   }
 
   // Retire l'élément le plus ancien dans out. Renvoie false si la file est vide.
   bool pop(T& out) {
     // TODO A1 : refuser si vide, sinon lire à l'indice tail_ modulo N puis avancer tail_
-    (void)out; return false;
+    if (empty()) return false;
+    out = buf_[tail_ & (N - 1)];
+    ++tail_;
+    return true;
   }
 
   // Élément le plus récent (la file ne doit pas être vide).
   const T& dernier() const { return buf_[(head_ - 1) & (N - 1)]; }
 
   // TODO A1 : écrire empty(), full() et size() à partir de head_ et tail_
-  bool empty() const { return true; }
-  bool full() const { return false; }
-  std::size_t size() const { return 0; }
+  bool empty() const { return head_ == tail_; }
+  bool full() const { return head_ - tail_ == N; }
+  std::size_t size() const { return head_ - tail_; }
   static constexpr std::size_t capacity() { return N; }
 };
