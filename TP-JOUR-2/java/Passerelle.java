@@ -43,8 +43,14 @@ public class Passerelle {
     }
 
     synchronized void fermer() {
-        // TODO B5 : vider et fermer le fichier CSV une seule fois, puis afficher le bilan sur stderr
-        ferme = true;
+        if (ferme) return;
+        try {
+            csv.flush();
+            csv.close();
+            System.err.println("Résumé: " + nbMesures + " mesures enregistrées dans le csv");
+        } catch(IOException e) {
+            System.err.println("Une erreur est survenue lors de la fermeture du fichier csv: " + e.getMessage());
+        }
     }
 
     static String vmRss() {
@@ -58,7 +64,8 @@ public class Passerelle {
     public static void main(String[] args) throws IOException {
         String fichier = args.length > 0 ? args[0] : "mesures.csv";
         Passerelle p = new Passerelle(fichier);
-        // TODO B5 : enregistrer un shutdown hook qui appelle p.fermer()
+        Runtime.getRuntime().addShutdownHook(new Thread(p::fermer));
+
         System.err.println("[passerelle] écriture dans " + fichier + ", pid " + ProcessHandle.current().pid());
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));

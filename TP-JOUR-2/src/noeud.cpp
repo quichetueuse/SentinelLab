@@ -14,6 +14,8 @@
 #include <cstring>
 #include <thread>
 #include <unistd.h>
+#include "i2c.hpp"
+#include "bme280.hpp"
 
 using namespace std::chrono;
 
@@ -32,6 +34,8 @@ struct Options {
   uint32_t bloquer_a = 0;      // tick auquel la boucle se bloque (test du chien de garde)
   bool silencieux = false;     // n'affiche pas une ligne par tick
   bool fuite = false;          // alloue à chaque tick (test de la garde d'allocation)
+  bool trace_i2c = false;
+  bool binaire = false;
 };
 
 static Options lireOptions(int argc, char** argv) {
@@ -47,6 +51,8 @@ static Options lireOptions(int argc, char** argv) {
     else if (!std::strcmp(a, "--bloquer-a")) valeur(o.bloquer_a);
     else if (!std::strcmp(a, "--silencieux")) o.silencieux = true;
     else if (!std::strcmp(a, "--fuite")) o.fuite = true;
+    else if (!std::strcmp(a, "--trace-i2c")) o.trace_i2c = true;
+    else if (!std::strcmp(a, "--binaire")) o.binaire = true;  
     else {
       std::fprintf(stderr,
           "usage : %s [--periode ms] [--emission ms] [--duree s] [--bloquer-a tick]\n"
@@ -161,6 +167,13 @@ int main(int argc, char** argv) {
   const Options opt = lireOptions(argc, argv);
   std::setvbuf(stdout, nullptr, _IOLBF, 0);   // une ligne = un envoi, même dans un tube
 
+  SimI2cBus i2c_bus(opt.trace_i2c);
+  Bme280 capteur(i2c_bus, 0x76);
+
+  if (!capteur.identifier()) {
+    std::fprintf(stderr, "Le capteur BME280 n'est pas visible sur le bus I2C");
+  }
+
   installer(SIGUSR1, isr_bouton);
   installer(SIGUSR2, isr_stats);
   installer(SIGTERM, isr_arret);
@@ -187,7 +200,9 @@ int main(int argc, char** argv) {
     const auto t_ms = static_cast<uint32_t>(duration_cast<milliseconds>(reveil - debut).count());
 
     // Acquisition et historique (aucune allocation)
-    Mesure m{t_ms, simulerTemperature(t_ms)};
+    float temp = 0.0f;
+    capteur.lireMesure(temp);
+    Mesure m{t_ms, temp};
     if (!historique.push(m)) {                // plein : on jette la plus ancienne
       Mesure ancienne;
       historique.pop(ancienne);
