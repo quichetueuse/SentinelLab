@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue; 
 
 public class Passerelle {
     private static final Pattern LIGNE = Pattern.compile("t=\\s*(\\d+) ms\\s+T=\\s*(-?\\d+\\.\\d+)");
@@ -22,6 +24,8 @@ public class Passerelle {
     private long nbMesures = 0;
     private final BufferedWriter csv;
     private boolean ferme = false;
+
+    private record MesureData(long tMs, double temp) {}
 
     Passerelle(String fichier) throws IOException {
         csv = new BufferedWriter(new FileWriter(fichier), 64 * 1024);   // tampon de 64 Ko
@@ -51,6 +55,7 @@ public class Passerelle {
         } catch(IOException e) {
             System.err.println("Une erreur est survenue lors de la fermeture du fichier csv: " + e.getMessage());
         }
+        ferme = true;
     }
 
     static String vmRss() {
@@ -61,10 +66,30 @@ public class Passerelle {
         return "inconnue";
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         String fichier = args.length > 0 ? args[0] : "mesures.csv";
         Passerelle p = new Passerelle(fichier);
         Runtime.getRuntime().addShutdownHook(new Thread(p::fermer));
+
+        // pile de 100 elements max
+        BlockingQueue<MesureData> file = new ArrayBlockingQueue<>(100);
+
+        // thread qui lit la pile et qui écrit dans le csv
+        Thread worker = Thread.ofVirtual().start(() -> {
+            try {
+                while (true) {
+                    MesureData m = file.take(); // Bloque s'il n'y a rien dans la file
+                    double moyenne = p.ajouter(m.temp());
+                    p.enregistrer(m.tMs(), m.temp(), moyenne);
+                    if (p.nbMesures % 10 == 0) {
+                        System.err.printf("[passerelle] %d mesures, moyenne glissante %.2f °C, VmRSS %s%n",
+                                p.nbMesures, moyenne, vmRss());
+                    }
+                }
+            } catch (InterruptedException | IOException e) {
+                // Arrêt normal du thread de travail
+            }
+        });
 
         System.err.println("[passerelle] écriture dans " + fichier + ", pid " + ProcessHandle.current().pid());
 
@@ -75,12 +100,11 @@ public class Passerelle {
             if (!m.find()) continue;                         // lignes de statistiques ignorées
             long tMs = Long.parseLong(m.group(1));
             double t = Double.parseDouble(m.group(2));
-            double moyenne = p.ajouter(t);
-            p.enregistrer(tMs, t, moyenne);
-            if (p.nbMesures % 10 == 0)
-                System.err.printf("[passerelle] %d mesures, moyenne glissante %.2f °C, VmRSS %s%n",
-                        p.nbMesures, moyenne, vmRss());
-        }
+
+            file.put(new MesureData(tMs, t));
         // fin de l'entrée (le nœud s'est arrêté) : le hook s'exécute à la sortie de la JVM
+        worker.interrupt();
+        p.fermer(); 
     }
+}
 }

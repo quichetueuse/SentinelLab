@@ -16,6 +16,10 @@
 #include <unistd.h>
 #include "i2c.hpp"
 #include "bme280.hpp"
+#include "file_bornee.hpp"
+#include "stats_gigue.hpp"
+
+std::atomic<uint32_t> debordements{0};
 
 using namespace std::chrono;
 
@@ -25,6 +29,33 @@ struct Mesure {
   uint32_t t_ms;
   float temp;
 };
+
+void tacheAcquisition(std::stop_token st, Bme280& capteur, FileBornee<Mesure, 16>& file) {
+    using namespace std::chrono;
+    const auto periode = milliseconds{100};
+    auto echeance = steady_clock::now();
+    StatsGigue gigue;
+    
+    while (!st.stop_requested()) {
+        echeance += periode;
+        std::this_thread::sleep_until(echeance); // instant absolu
+        
+        auto maintenant = steady_clock::now();
+        int64_t retard = duration_cast<microseconds>(maintenant - echeance).count();
+        gigue.ajouter(retard);
+
+        Mesure m;
+        float temp = 0.0f;
+        if (capteur.lireMesure(temp)) {
+            m.t_ms = static_cast<uint32_t>(duration_cast<milliseconds>(maintenant.time_since_epoch()).count());
+            m.temp = temp;
+            if (!file.try_push(m)) {
+                debordements.fetch_add(1, std::memory_order_relaxed);
+            }
+        }
+    }
+    gigue.afficher("acquisition");
+}
 
 // ---------------------------------------------------------------- options
 struct Options {
@@ -188,11 +219,17 @@ int main(int argc, char** argv) {
   std::fprintf(stderr, "[noeud] pid %d, période %u ms. kill -USR1 %d = bouton, -USR2 = stats\n",
                getpid(), opt.periode_ms, getpid());
 
+  // Lance le thread qui gère la récup des données des capteurs en parallele
+
+  FileBornee<Mesure, 16> file_mesures;
+  std::jthread acquisition_thread(tacheAcquisition, std::ref(capteur), std::ref(file_mesures));
+
   alloc_guard::fin_initialisation();          // plus aucune allocation à partir d'ici
 
   const auto debut = steady_clock::now();
   auto prochain = debut;
   for (uint32_t tick = 1; !g_arret; ++tick) {
+
     prochain += milliseconds{opt.periode_ms};
     std::this_thread::sleep_until(prochain);
     const auto reveil = steady_clock::now();
@@ -200,13 +237,17 @@ int main(int argc, char** argv) {
     const auto t_ms = static_cast<uint32_t>(duration_cast<milliseconds>(reveil - debut).count());
 
     // Acquisition et historique (aucune allocation)
-    float temp = 0.0f;
-    capteur.lireMesure(temp);
-    Mesure m{t_ms, temp};
-    if (!historique.push(m)) {                // plein : on jette la plus ancienne
-      Mesure ancienne;
-      historique.pop(ancienne);
-      historique.push(m);
+    Mesure m;
+    if (file_mesures.try_pop(m)) {
+      if (!historique.push(m)) {
+        Mesure ancienne;
+        historique.pop(ancienne);
+        historique.push(m);
+      }
+    }
+    else {
+      m.t_ms = t_ms;
+      m.temp = 22.0f;
     }
     if (opt.fuite) {
       auto* copie = new Mesure(m);            // volontairement fautif : voir étape A2

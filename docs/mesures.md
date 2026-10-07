@@ -127,3 +127,203 @@ courant moyen : 10.508 mA, autonomie estimée 190 h (7.9 jours)
 ```
 
 ## TP5
+
+### Mesure au repos
+
+```bash
+eliot@DESKTOP-TOI6LP5:/mnt/c/Users/Eliot/Documents/C++/SentinelLab/TP-JOUR-2$ ./build/noeud --periode 100 --duree 5
+[noeud] pid 17873, période 100 ms. kill -USR1 17873 = bouton, -USR2 = stats
+t=   100 ms  T=22.00 °C  LED=off  PWM [###-------]  33 %
+t=   200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1100 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2100 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3100 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4100 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  5000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+=== statistiques ===
+ticks            : 50
+allocations      : init 4, régime 0
+historique       : 49/64 mesures, dernière 22.42 °C
+bouton           : 0 appui(s), LED off (ODR=0x00000000)
+rapport cyclique : 49.9 % (période 100 ms, émission 50 ms)
+courant moyen    : 49.911 mA, autonomie estimée 40 h (1.7 jours)
+acquisition : gigue min 88 µs  max 449 µs  moy 312 µs
+```
+
+### Mesure en pleine charge (avec stress test)
+
+```bash
+eliot@DESKTOP-TOI6LP5:/mnt/c/Users/Eliot/Documents/C++/SentinelLab/TP-JOUR-2$ stress-ng --cpu 4 --timeout 10s &
+[1] 18061
+eliot@DESKTOP-TOI6LP5:/mnt/c/Users/Eliot/Documents/C++/SentinelLab/TP-JOUR-2$ ./build/noeud --periode 100 --duree 10stress-ng: info:  [18061] setting to a 10 secs run per stressor
+stress-ng: info:  [18061] dispatching hogs: 4 cpu
+
+[noeud] pid 18075, période 100 ms. kill -USR1 18075 = bouton, -USR2 = stats
+t=   100 ms  T=22.00 °C  LED=off  PWM [###-------]  33 %
+t=   200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=   900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1100 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  1900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2100 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  2900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3100 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  3900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4100 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  4900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  5000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  5100 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  5200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  5300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  5400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  5500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  5600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  5700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  5800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  5900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  6000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  6100 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  6200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  6300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  6400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  6500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  6600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  6700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  6800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  6900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  7000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  7100 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  7200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  7300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  7400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  7500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  7600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  7700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  7800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  7900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  8000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  8100 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  8200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  8300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+stress-ng: info:  [18061] skipped: 0
+stress-ng: info:  [18061] passed: 4: cpu (4)
+stress-ng: info:  [18061] failed: 0
+stress-ng: info:  [18061] metrics untrustworthy: 0
+stress-ng: info:  [18061] successful run completed in 10.01 secs
+t=  8400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  8500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  8600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  8700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  8800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  8900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  9000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  9100 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  9200 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  9300 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  9400 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  9500 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  9600 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  9700 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  9800 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t=  9900 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+t= 10000 ms  T=22.42 °C  LED=off  PWM [###-------]  37 %
+=== statistiques ===
+ticks            : 100
+allocations      : init 4, régime 0
+historique       : 64/64 mesures, dernière 22.42 °C
+bouton           : 0 appui(s), LED off (ODR=0x00000000)
+rapport cyclique : 50.0 % (période 100 ms, émission 50 ms)
+courant moyen    : 49.996 mA, autonomie estimée 40 h (1.7 jours)
+acquisition : gigue min 85 µs  max 828 µs  moy 166 µs
+```
+
+### Passerelle Java en multi-threading
+
+```bash
+eliot@DESKTOP-TOI6LP5:/mnt/c/Users/Eliot/Documents/C++/SentinelLab/TP-JOUR-2$ ./build/noeud --duree 10 | java java/Passerelle.java mesures.csv
+[noeud] pid 18204, période 500 ms. kill -USR1 18204 = bouton, -USR2 = stats
+[passerelle] écriture dans mesures.csv, pid 18205
+Résumé: 0 mesures enregistrées dans le csv
+[passerelle] 0 mesures, moyenne glissante 22.42 °C, VmRSS 134800 kB
+acquisition : gigue min 84 µs  max 486 µs  moy 317 µs
+```
