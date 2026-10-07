@@ -1,3 +1,8 @@
+# Mesures obtenues lors des TPs
+
+## TP3
+
+```bash
 eliot@DESKTOP-TOI6LP5:/mnt/c/Users/Eliot/Documents/C++/SentinelLab/TP-JOUR-2$ ./build/noeud --duree 5
 [noeud] pid 16218, période 500 ms. kill -USR1 16218 = bouton, -USR2 = stats
 t= 500 ms T=22.45 °C LED=off PWM [###-------] 37 %
@@ -20,10 +25,16 @@ courant moyen : 10.002 mA, autonomie estimée 200 h (8.3 jours)
 eliot@DESKTOP-TOI6LP5:/mnt/c/Users/Eliot/Documents/C++/SentinelLab/TP-JOUR-2$ size build/noeud
 text data bss dec hex filename
 33194 1168 680 35042 88e2 build/noeud
+```
+
+```bash
 eliot@DESKTOP-TOI6LP5:/mnt/c/Users/Eliot/Documents/C++/SentinelLab/TP-JOUR-2$ ./build/noeud --duree 5 --fuite
 [noeud] pid 16244, période 500 ms. kill -USR1 16244 = bouton, -USR2 = stats
 Le programme est initialise, impossible d allouer plus de memoire.
 Aborted ./build/noeud --duree 5 --fuite
+```
+
+```bash
 eliot@DESKTOP-TOI6LP5:/mnt/c/Users/Eliot/Documents/C++/SentinelLab/TP-JOUR-2$ g++ -fsanitize=address,undefined src/demo_bugs.cpp -o demo_bugs_asan
 eliot@DESKTOP-TOI6LP5:/mnt/c/Users/Eliot/Documents/C++/SentinelLab/TP-JOUR-2$ ./demo_bugs_asan tas
 =================================================================
@@ -77,6 +88,9 @@ ASan internal: fe
 Left alloca redzone: ca
 Right alloca redzone: cb
 ==16270==ABORTING
+```
+
+```bash
 eliot@DESKTOP-TOI6LP5:/mnt/c/Users/Eliot/Documents/C++/SentinelLab/TP-JOUR-2$ valgrind --leak-check=full ./build/noeud --duree 5
 ==16283== Memcheck, a memory error detector
 ==16283== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
@@ -110,3 +124,6 @@ courant moyen : 10.508 mA, autonomie estimée 190 h (7.9 jours)
 ==16283==
 ==16283== For lists of detected and suppressed errors, rerun with: -s
 ==16283== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+```
+
+## TP5
