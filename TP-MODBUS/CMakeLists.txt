@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.20)
+project(tp1_modbus CXX)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE RelWithDebInfo)
+endif()
+set(AVERTISSEMENTS -Wall -Wextra -Wpedantic -Wconversion -Wno-sign-conversion)
+
+add_executable(variateur src/esclave.cpp)
+target_compile_options(variateur PRIVATE ${AVERTISSEMENTS})
+
+enable_testing()
+add_executable(test_modbus tests/test_modbus.cpp)
+target_compile_options(test_modbus PRIVATE ${AVERTISSEMENTS} -fsanitize=address,undefined)
+target_link_options(test_modbus PRIVATE -fsanitize=address,undefined)
+add_test(NAME modbus COMMAND test_modbus)
