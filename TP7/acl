@@ -1,0 +1,5 @@
+user node_user
+topic write eidl/b01/node/1/mesures
+
+user obs
+topic read eidl/#

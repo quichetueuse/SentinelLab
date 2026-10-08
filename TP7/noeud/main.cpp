@@ -15,7 +15,7 @@ int main() {
 
     std::mt19937 rng{42};
     std::uniform_real_distribution<double> temp(18.0, 35.0);
-    for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 1000; ++i) {
         long long ts = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
         std::string json = "{\"t\":" + std::to_string(temp(rng)) +
