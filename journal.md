@@ -17,6 +17,7 @@
 Certains TP étaient prévus pour être réalisés sous LINUX, j'ai donc du mettre en place du WSL pour pouvoir les réalisés.
 
 Voir plus en détails la manière dont bien se servir de git (gestion des branches, gestion des tags, cherrypick, rebase, merge).
+Mettre en pratique avec des éxemples concret la méthode solide, avec une comparaison sans/avec pour voir les différents avantages de celle-ci plutot que des exemples abstraits.
 
 ## Commandes utiles
 
